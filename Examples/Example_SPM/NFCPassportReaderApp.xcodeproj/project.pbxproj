@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		189E2A1C2CF57E2900FA5434 /* SettingsStoreCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189E2A1B2CF57E2900FA5434 /* SettingsStoreCAN.swift */; };
 		A117B7EB2695AD2400E13C18 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A117B7E62695AD2400E13C18 /* ViewController.swift */; };
 		A117B7EC2695AD2400E13C18 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A117B7E72695AD2400E13C18 /* PreviewView.swift */; };
 		A117B7ED2695AD2400E13C18 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A117B7E82695AD2400E13C18 /* LICENSE */; };
@@ -52,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		189E2A1B2CF57E2900FA5434 /* SettingsStoreCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreCAN.swift; sourceTree = "<group>"; };
 		A117B7E62695AD2400E13C18 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A117B7E72695AD2400E13C18 /* PreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A117B7E82695AD2400E13C18 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -90,6 +92,10 @@
 		A1FDC53325D3F1DE00D22FF4 /* CheckBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxView.swift; sourceTree = "<group>"; };
 		A1FDC53525D43AB400D22FF4 /* MRZEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRZEntryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		189E2A272CF584B500FA5434 /* CANViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CANViews; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A16EB22A22A9E9E10008F53F /* Frameworks */ = {
@@ -195,6 +201,7 @@
 			children = (
 				A17134BF22C8F0A600C457C3 /* PassportUtils.swift */,
 				A1769DF625D3E318006002D1 /* SettingsStore.swift */,
+				189E2A1B2CF57E2900FA5434 /* SettingsStoreCAN.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -202,6 +209,7 @@
 		A1CE83B022C91DF100E3EACF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				189E2A272CF584B500FA5434 /* CANViews */,
 				A1298C9B25D539CD00F5713E /* HelperViews */,
 				A17134BD22C8EF7100C457C3 /* MainView.swift */,
 				A1FDC53525D43AB400D22FF4 /* MRZEntryView.swift */,
@@ -241,6 +249,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				189E2A272CF584B500FA5434 /* CANViews */,
 			);
 			name = NFCPassportReaderApp;
 			packageProductDependencies = (
@@ -356,6 +367,7 @@
 				A1C234C225DD19DE003FFD79 /* PassportSummaryView.swift in Sources */,
 				A1614B9225D5856600191749 /* ExportPassportView.swift in Sources */,
 				A18248C22369D17300581384 /* DetailsView.swift in Sources */,
+				189E2A1C2CF57E2900FA5434 /* SettingsStoreCAN.swift in Sources */,
 				A1FDC53425D3F1DE00D22FF4 /* CheckBoxView.swift in Sources */,
 				A1A13B9525B8A29E0026074C /* UIApplicationExt.swift in Sources */,
 				A16EB23322A9E9E10008F53F /* SceneDelegate.swift in Sources */,
@@ -517,9 +529,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NFCPassportReaderApp/NFCPassportReader.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A4ZM73UFF5;
+				DEVELOPMENT_TEAM = CLUY5VBG3U;
 				INFOPLIST_FILE = NFCPassportReaderApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -527,8 +540,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.andyqua.nfcpassportreader;
+				PRODUCT_BUNDLE_IDENTIFIER = vn.lochv.nfc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -541,9 +555,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NFCPassportReaderApp/NFCPassportReader.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A4ZM73UFF5;
+				DEVELOPMENT_TEAM = CLUY5VBG3U;
 				INFOPLIST_FILE = NFCPassportReaderApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -551,8 +566,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.andyqua.nfcpassportreader;
+				PRODUCT_BUNDLE_IDENTIFIER = vn.lochv.nfc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

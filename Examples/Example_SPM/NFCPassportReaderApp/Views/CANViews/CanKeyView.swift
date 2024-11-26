@@ -1,5 +1,5 @@
 //
-//  MainView.swift
+//  CanKeyView.swift
 //  NFCPassportReaderApp
 //
 //  Created by Andy Qua on 04/06/2019.
@@ -13,11 +13,10 @@ import NFCPassportReader
 import UniformTypeIdentifiers
 import MRZParser
 
-let appLogging = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "app")
+//let appLogging = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "app")
 
-
-struct MainView : View {
-    @EnvironmentObject var settings: SettingsStore
+struct CanKeyView : View {
+    @EnvironmentObject var settings: SettingsStoreCAN
     @Environment(\.colorScheme) var colorScheme
 
     @State private var showingAlert = false
@@ -40,14 +39,12 @@ struct MainView : View {
         NavigationView {
             ZStack {
                 NavigationLink( destination: SettingsView(), isActive: $showSettings) { Text("") }
-                NavigationLink( destination: PassportView(), isActive: $showDetails) { Text("") }
+                NavigationLink( destination: PassportViewCAN(), isActive: $showDetails) { Text("") }
                 NavigationLink( destination: StoredPassportView(), isActive: $showSavedPassports) { Text("") }
                 NavigationLink( destination: MRZScanner(completionHandler: { mrz in
                     
-                    if let (docNr, dob, doe) = parse( mrz:mrz ) {
+                    if let (docNr) = parse( mrz:mrz ) {
                         settings.passportNumber = docNr
-                        settings.dateOfBirth = dob
-                        settings.dateOfExpiry = doe
                     }
                     showScanMRZ = false
                 }).navigationTitle("Scan MRZ"), isActive: $showScanMRZ){ Text("") }
@@ -59,7 +56,7 @@ struct MainView : View {
                             Label("Scan MRZ", systemImage:"camera")
                         }.padding([.top, .trailing])
                     }
-                    MRZEntryView()
+                    MRZEntryViewCanKey()
                     
                     Button(action: {
                         self.scanPassport()
@@ -131,29 +128,33 @@ struct MainView : View {
 }
 
 // MARK: View functions - functions that affect the view
-extension MainView {
+extension CanKeyView {
     
     var isValid : Bool {
-        return settings.passportNumber.count >= 8
+        return settings.passportNumber.count >= 6
     }
 
-    func parse( mrz:String ) -> (String, Date, Date)? {
-        print( "mrz = \(mrz)")
+    func parse( mrz:String ) -> String? {
         
         let parser = MRZParser(isOCRCorrectionEnabled: true)
-        if let result = parser.parse(mrzString: mrz),
-           let docNr = result.documentNumber,
-           let dob = result.birthdate,
-           let doe = result.expiryDate {
+    
+        if let result = parser.parse(mrzString: mrz) {
+            let docNr = result.documentNumber ?? ""
             
-            return (docNr, dob, doe)
+             // Lấy từ ký tự thứ 3 (index = 3)
+             let startIndex = docNr.index(docNr.startIndex, offsetBy: 3)
+             let canKey = String(docNr[startIndex...])
+        
+             return canKey
         }
+           
+        
         return nil
     }
 }
 
 // MARK: Action Functions
-extension MainView {
+extension CanKeyView {
 
     func shareLogs() {
         gettingLogs = true
@@ -173,13 +174,6 @@ extension MainView {
         let df = DateFormatter()
         df.timeZone = TimeZone(secondsFromGMT: 0)
         df.dateFormat = "YYMMdd"
-        
-        let pptNr = settings.passportNumber
-        let dob = df.string(from:settings.dateOfBirth)
-        let doe = df.string(from:settings.dateOfExpiry)
-
-        let passportUtils = PassportUtils()
-        let mrzKey = passportUtils.getMRZKey( passportNumber: pptNr, dateOfBirth: dob, dateOfExpiry: doe)
 
         // Set the masterListURL on the Passport Reader to allow auto passport verification
         let masterListURL = Bundle.main.url(forResource: "masterList", withExtension: ".pem")!
@@ -187,10 +181,6 @@ extension MainView {
         
         // Set whether to use the new Passive Authentication verification method (default true) or the old OpenSSL CMS verifiction
         passportReader.passiveAuthenticationUsesOpenSSL = !settings.useNewVerificationMethod
-
-        // If we want to read only specific data groups we can using:
-//        let dataGroups : [DataGroupId] = [.COM, .SOD, .DG1, .DG2, .DG7, .DG11, .DG12, .DG14, .DG15]
-//        passportReader.readPassport(mrzKey: mrzKey, tags:dataGroups, completed: { (passport, error) in
         
         appLogging.error( "Using version \(UIApplication.version)" )
         
@@ -206,11 +196,8 @@ extension MainView {
             }
             
             do {
-                
-                let startIndex = mrzKey.index(mrzKey.startIndex, offsetBy: 3)
-                let canKey = String(mrzKey[startIndex...])
 
-                let passport = try await passportReader.readPassport( canKey: canKey, useExtendedMode: false,  customDisplayMessage:customMessageHandler)
+                let passport = try await passportReader.readPassport( canKey: settings.passportNumber, skipCA: true, useExtendedMode: false,  customDisplayMessage:customMessageHandler)
                 
                 if let _ = passport.faceImageInfo {
                     print( "Got face Image details")
@@ -243,16 +230,16 @@ extension MainView {
 
 //MARK: PreviewProvider
 #if DEBUG
-struct ContentView_Previews : PreviewProvider {
+struct ContentViewCanKey_Previews : PreviewProvider {
 
     static var previews: some View {
         let settings = SettingsStore()
         
         return Group {
-            MainView()
+            CanKeyView()
                 .environmentObject(settings)
                 .environment( \.colorScheme, .light)
-            MainView()
+            CanKeyView()
                 .environmentObject(settings)
                 .environment( \.colorScheme, .dark)
         }

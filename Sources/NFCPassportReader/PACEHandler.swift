@@ -72,7 +72,7 @@ public class PACEHandler {
         isPACESupported = true
     }
     
-    public func doPACE( mrzKey : String ) async throws {
+    public func doPACE( canKey : String ) async throws {
         guard isPACESupported else {
             throw NFCPassportReaderError.NotYetSupported( "PACE not supported" )
         }
@@ -81,15 +81,14 @@ public class PACEHandler {
         
         paceOID = paceInfo.getObjectIdentifier()
         parameterSpec = try paceInfo.getParameterSpec()
-        
         mappingType = try paceInfo.getMappingType()  // Either GM, CAM, or IM.
         agreementAlg = try paceInfo.getKeyAgreementAlgorithm()  // Either DH or ECDH.
         cipherAlg  = try paceInfo.getCipherAlgorithm()  // Either DESede or AES.
         digestAlg = try paceInfo.getDigestAlgorithm()  // Either SHA-1 or SHA-256.
         keyLength = try paceInfo.getKeyLength()  // Get key length  the enc cipher. Either 128, 192, or 256.
 
-        paceKeyType = PACEHandler.MRZ_PACE_KEY_REFERENCE
-        paceKey = try createPaceKey( from: mrzKey )
+        paceKeyType = PACEHandler.CAN_PACE_KEY_REFERENCE
+        paceKey = try createPaceKey( from: canKey )
         
         // Temporary logging
         Logger.pace.debug("doPace - inpit parameters" )
@@ -100,7 +99,6 @@ public class PACEHandler {
         Logger.pace.debug("cipherAlg - \(self.cipherAlg)" )
         Logger.pace.debug("digestAlg - \(self.digestAlg)" )
         Logger.pace.debug("keyLength - \(self.keyLength)" )
-        Logger.pace.debug("keyLength - \(mrzKey)" )
         Logger.pace.debug("paceKey - \(binToHexRep(self.paceKey, asArray:true))" )
 
         // First start the initial auth call
@@ -582,13 +580,20 @@ extension PACEHandler {
     /// Computes a key seed based on an MRZ key
     /// - Parameter the mrz key
     /// - Returns a encoded key based on the mrz key that can be used for PACE
-    func createPaceKey( from mrzKey: String ) throws -> [UInt8] {
-        let buf: [UInt8] = Array(mrzKey.utf8)
-        let hash = calcSHA1Hash(buf)
+    func createPaceKey( from canKey: String ) throws -> [UInt8] {
+        var keySeed = (0..<6).map { UInt8(canKey[canKey.index(canKey.startIndex, offsetBy: $0)].asciiValue!) }
         
-        let smskg = SecureMessagingSessionKeyGenerator()
-        let key = try smskg.deriveKey(keySeed: hash, cipherAlgName: cipherAlg, keyLength: keyLength, nonce: nil, mode: .PACE_MODE, paceKeyReference: paceKeyType)
-        return key
+        let counter: Int32 = 3 // PACE mode
+
+        // Chuyển giá trị counter thành Big-Endian (4 byte)
+        let counterBigEndian = counter.bigEndian
+        
+        // Thêm giá trị counter (Int32) vào cuối preimage (4 byte, Big-Endian)
+        keySeed.append(contentsOf: withUnsafeBytes(of: counterBigEndian) { Array($0) })
+                
+        let hash = calcSHA1Hash(keySeed)
+                
+        return Array(hash[0..<16])
     }
     
     /// Performs the ECDH PACE GM key agreement protocol by multiplying a private key with a public key
