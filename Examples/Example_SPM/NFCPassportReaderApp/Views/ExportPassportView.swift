@@ -29,7 +29,7 @@ struct MultipleSelectionRow: View {
 }
 
 struct ExportPassportView: View {
-    @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var settings: SettingsStoreCAN
         
     @State var items: [DataGroupId] = []
     @State var selections: [DataGroupId] = []
@@ -71,7 +71,7 @@ struct ExportPassportView: View {
                 items.append(contentsOf: DataGroupId.allCases.filter { passport.dataGroupsAvailable.contains($0) } )
                 
                 // Default select only the DGs that contain no personal info.
-                selections = [.SOD, .COM, .DG14, .DG15]
+                selections = [.SOD, .COM,.DG13, .DG14, .DG15]
                 isAASupported = passport.activeAuthenticationSupported
                 if isAASupported {
                     includeAA = true

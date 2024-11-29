@@ -28,6 +28,7 @@ struct DetailsView : View {
     init( passport : NFCPassportModel ) {
         self.passport = passport
         sections.append(getChipInfoSection(self.passport))
+        sections.append(getRawData13(self.passport))
         sections.append(getVerificationDetailsSection(self.passport))
         sections.append(getCertificateSigningCertDetails(certItems:self.passport.documentSigningCertificate?.getItemsAsDict()))
         sections.append(getCertificateSigningCertDetails(certItems:self.passport.countrySigningCertificate?.getItemsAsDict()))
@@ -156,6 +157,12 @@ struct DetailsView : View {
 
         }
         return items
+    }
+    
+    func getRawData13( _ passport : NFCPassportModel) -> [Item] {
+        guard let dg13 = passport.getDataGroup(.DG13) as? DataGroup13 else { return [] }
+
+        return [Item(title:"Việt Nam", value: dg13.rawData13 ?? "")]
     }
 }
 

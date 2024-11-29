@@ -15,7 +15,7 @@ class DataGroupParser {
                                       NotImplementedDG.self, NotImplementedDG.self, NotImplementedDG.self,
                                       NotImplementedDG.self, DataGroup7.self, NotImplementedDG.self,
                                       NotImplementedDG.self, NotImplementedDG.self, DataGroup11.self,
-                                      DataGroup12.self, NotImplementedDG.self, DataGroup14.self,
+                                      DataGroup12.self, DataGroup13.self, DataGroup14.self,
                                       DataGroup15.self, NotImplementedDG.self, SOD.self]
     
     
