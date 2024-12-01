@@ -11,7 +11,7 @@ import SwiftUI
 import NFCPassportReader
 
 struct PassportView : View {
-    @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var settings: SettingsStoreCAN
     @State private var showExportPassport : Bool = false
     
     var body: some View {
@@ -58,7 +58,7 @@ struct PassportView_Previews : PreviewProvider {
         } else {
             passport = NFCPassportModel()
         }
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         settings.passport = passport
         
         return NavigationView {

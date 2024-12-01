@@ -10,7 +10,7 @@ import SwiftUI
 import NFCPassportReader
 
 struct SettingsView: View {
-    @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var settings: SettingsStoreCAN
     
     private var logLevels = ["Verbose", "Debug", "Info", "Warning", "Error", "None"]
 
@@ -40,7 +40,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         SettingsView()
             .environmentObject(settings)
     }

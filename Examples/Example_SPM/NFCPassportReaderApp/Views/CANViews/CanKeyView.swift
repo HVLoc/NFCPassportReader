@@ -13,7 +13,7 @@ import NFCPassportReader
 import UniformTypeIdentifiers
 import MRZParser
 
-//let appLogging = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "app")
+let appLogging = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "app")
 
 struct CanKeyView : View {
     @EnvironmentObject var settings: SettingsStoreCAN
@@ -233,7 +233,7 @@ extension CanKeyView {
 struct ContentViewCanKey_Previews : PreviewProvider {
 
     static var previews: some View {
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         
         return Group {
             CanKeyView()

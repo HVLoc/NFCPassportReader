@@ -58,11 +58,11 @@ struct PassportViewCAN_Previews : PreviewProvider {
         } else {
             passport = NFCPassportModel()
         }
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         settings.passport = passport
         
         return NavigationView {
-            PassportView()
+            PassportViewCAN()
                 .environmentObject(settings)
                 .environment( \.colorScheme, .light)
                 .navigationTitle("WEEE")

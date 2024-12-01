@@ -153,7 +153,7 @@ extension ExportPassportView {
 
 struct ExportPassportView_Previews: PreviewProvider {
     static var previews: some View {
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         settings.passport = NFCPassportModel()
         
         return NavigationView {

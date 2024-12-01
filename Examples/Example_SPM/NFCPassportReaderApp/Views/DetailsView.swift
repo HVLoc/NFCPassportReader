@@ -189,7 +189,7 @@ struct SectionGroup : View {
 struct DetailsView_Previews: PreviewProvider {
 
     static var previews: some View {
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         let passport = NFCPassportModel()
         return DetailsView(passport:passport)
             .environmentObject(settings)

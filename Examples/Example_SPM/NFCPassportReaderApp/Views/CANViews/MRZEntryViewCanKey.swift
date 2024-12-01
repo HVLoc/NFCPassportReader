@@ -49,7 +49,7 @@ struct MRZEntryViewCanKey : View {
 struct MRZEntryViewCanKey_Previews : PreviewProvider {
     
     static var previews: some View {
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         
         return
             Group {

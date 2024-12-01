@@ -10,7 +10,7 @@ import SwiftUI
 import NFCPassportReader
 
 struct StoredPassportView: View {
-    @EnvironmentObject var settings: SettingsStore
+    @EnvironmentObject var settings: SettingsStoreCAN
     @State private var showImport : Bool = false
     @State private var showDetails = false
     @State private var storedPassports = [URL]()
@@ -141,7 +141,7 @@ extension StoredPassportView {
 
 struct StoredPassportView_Previews: PreviewProvider {
     static var previews: some View {
-        let settings = SettingsStore()
+        let settings = SettingsStoreCAN()
         
         StoredPassportView()
             .environmentObject(settings)
